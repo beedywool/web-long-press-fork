@@ -7,29 +7,72 @@
     root.LongPress = factory();
   }
 })(typeof window !== "undefined" ? window : global, function () {
+  // default options
   const defaultOptions = {
     triggerClass: "long-press",
     pressDelay: 800,
+    eventName: "longpress",
+    bubbles: true,
   };
 
-  function LongPress(options) {
-    this.options = { ...defaultOptions, options };
-    init(this.options);
+  // constructor
+  function LongPress(opts) {
+    this.options = { ...defaultOptions, ...opts };
+    this.timer;
+    this.init();
   }
 
-  function init(options) {
+  /**
+   * initialize
+   */
+  LongPress.prototype.init = function () {
+    const that = this;
+    const { timer } = that;
+    if (timer) clearTimeout(timer);
+    const pressStart = that.pressStart.bind(that);
+    const init = that.init.bind(that);
     if ("ontouchstart" in document.body) {
-      document.addEventListener("touchstart", handlePressStart);
+      document.addEventListener("touchstart", pressStart, {
+        once: true,
+        passive: false,
+      });
+      document.addEventListener("touchend", init, {
+        once: true,
+      });
     } else {
-      document.addEventListener("mousedown", handlePressStart);
+      document.addEventListener("mousedown", pressStart, {
+        once: true,
+      });
+      document.addEventListener("mouseup", init, {
+        once: true,
+      });
     }
-  }
+  };
 
-  function handlePressStart(e) {
-    console.dir(e.target);
-    if (e.target.className.match(/long-press/)) {
-    }
-  }
+  /**
+   * handle press start
+   * @param {Event} e
+   * @param {Object} options
+   */
+  LongPress.prototype.pressStart = function (e) {
+    const that = this;
+    const { options } = that;
+    e.preventDefault();
+    if (e.target.className.split(" ").indexOf(options.triggerClass) < 0) return;
+
+    that.timer = setTimeout(() => {
+      that.handleLongPress(e.target);
+    }, options.pressDelay);
+  };
+
+  /**
+   * trigger longpress event
+   * @param {HTMLElemnt} target
+   */
+  LongPress.prototype.handleLongPress = function (target) {
+    const { eventName, bubbles } = this.options;
+    target.dispatchEvent(new Event(eventName, { bubbles }));
+  };
 
   return LongPress;
 });

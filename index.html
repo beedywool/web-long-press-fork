@@ -1,18 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <button class="long-press">Long Press Me</button>
 
-    <script src="./index.js"></script>
-    <script>
-      if (window.LongPress) {
-        var longPress = new LongPress({});
-      }
-    </script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <style>
+    button {
+      width: 200px;
+      height: 100px;
+      margin: 20px;
+      padding: 20px;
+      background: pink;
+    }
+  </style>
+</head>
+
+<body>
+  <button class="longpress-500">LongPress for 0.5s</button>
+  <button class="longpress-1000">LongPress for 1s</button>
+
+  <script src="./longpress.js"></script>
+  <script>
+    if (window.LongPress) {
+      new LongPress({
+        triggerClass: 'longpress-500',
+        pressDelay: 500,
+        eventName: 'longpress500',
+        bubbles: true
+      });
+
+      new LongPress({
+        triggerClass: 'longpress-1000',
+        pressDelay: 1000,
+        eventName: 'longpress1000'
+      });
+
+      document.addEventListener("longpress500", (e) => {
+        console.log(e.target, 'has been long pressed for 0.5ms');
+      });
+
+      document.addEventListener("longpress1000", (e) => {
+        console.log(e.target, 'has been long pressed for 1s');
+      });
+    }
+  </script>
+</body>
+
 </html>
