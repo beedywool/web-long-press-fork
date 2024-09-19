@@ -68,14 +68,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var that = this;
     var options = that.options;
     // Check if the target is an input field
+    if (e.target.className.split(" ").indexOf(options.triggerClass) < 0) return;
+    
+    // If the target is not an input field, prevent default behavior
     if (!['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
       e.preventDefault();
     }
-    if (e.target.className.split(" ").indexOf(options.triggerClass) < 0) return;
+    
+    // Start the timer for long press
     that.timer = setTimeout(function () {
       that.handleLongPress(e.target);
     }, options.pressDelay);
   };
+
   /**
    * trigger longpress event
    * @param {HTMLElemnt} target
