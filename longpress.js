@@ -67,7 +67,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   LongPress.prototype.pressStart = function (e) {
     var that = this;
     var options = that.options;
-    e.preventDefault();
+    // Check if the target is an input field
+    if (!['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
+      e.preventDefault();
+    }
     if (e.target.className.split(" ").indexOf(options.triggerClass) < 0) return;
     that.timer = setTimeout(function () {
       that.handleLongPress(e.target);
