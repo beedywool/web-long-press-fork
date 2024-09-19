@@ -67,20 +67,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   LongPress.prototype.pressStart = function (e) {
     var that = this;
     var options = that.options;
-    // Check if the target is an input field
+  
+    // Check if the target has the trigger class, if not, return early
     if (e.target.className.split(" ").indexOf(options.triggerClass) < 0) return;
-    
-    // If the target is not an input field, prevent default behavior
-    if (!['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
-      e.preventDefault();
-    }
-    
-    // Start the timer for long press
+  
+    // Start the timer for the long press
     that.timer = setTimeout(function () {
+      // Prevent default only when the long press is triggered
+      if (!['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
+        e.preventDefault();
+      }
       that.handleLongPress(e.target);
     }, options.pressDelay);
   };
-
   /**
    * trigger longpress event
    * @param {HTMLElemnt} target
