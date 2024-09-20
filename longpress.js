@@ -1,4 +1,3 @@
-
 "use strict";
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -64,41 +63,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
    * @param {Object} options
    */
 
+
   LongPress.prototype.pressStart = function (e) {
     var that = this;
     var options = that.options;
-  
-    // Check if the target has the trigger class, if not, return early
+    // Check if the target is an input field
     if (e.target.className.split(" ").indexOf(options.triggerClass) < 0) return;
-  
-    // Variables to track movement and scrolling
-    var startX = e.touches ? e.touches[0].clientX : e.clientX;
-    var startY = e.touches ? e.touches[0].clientY : e.clientY;
-    var moved = false;
-  
-    // Function to check if the user has scrolled
-    function onMove(moveEvent) {
-      var moveX = moveEvent.touches ? moveEvent.touches[0].clientX : moveEvent.clientX;
-      var moveY = moveEvent.touches ? moveEvent.touches[0].clientY : moveEvent.clientY;
-      if (Math.abs(moveX - startX) > 10 || Math.abs(moveY - startY) > 10) {
-        moved = true;
-      }
+    
+    // If the target is not an input field, prevent default behavior
+    if (!['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
+      e.preventDefault();
     }
-  
-    // Add event listener for touchmove to detect scrolling
-    document.addEventListener("touchmove", onMove, { passive: true });
-      if (!moved && !['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
-        e.preventDefault(); // Prevent default if the user hasn't scrolled
-      }
-    // Start the timer for the long press
+    
+    // Start the timer for long press
     that.timer = setTimeout(function () {
       that.handleLongPress(e.target);
-  
-      // Remove the touchmove event listener after the long press is handled
-      document.removeEventListener("touchmove", onMove);
     }, options.pressDelay);
   };
 
+  /**
+   * trigger longpress event
+   * @param {HTMLElemnt} target
+   */
 
 
   LongPress.prototype.handleLongPress = function (target) {
