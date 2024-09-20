@@ -1,3 +1,8 @@
+FORK THAT CHANGES:
+Instead of suppressing the default behavior for everything, which caused issues with some stuff, especially on mobile, just prevent text from being selected when a text element is set for long-press.
+It makes it smoothly work for buttons, divs, and all other elements that don't have default long-press interactions, with the exception of text, it will work with text. 
+Doing so allows mobile users to scroll on the elements that are set for long-press.
+
 A tiny long-press event handler for web pages with pure vanilla javascript. Support pc's mouse click and mobile's touch events.
 
 # Install
