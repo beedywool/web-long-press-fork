@@ -70,11 +70,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     // Check if the target is an input field
     if (e.target.className.split(" ").indexOf(options.triggerClass) < 0) return;
     
-    /*// If the target is not an input field, prevent default behavior
-    if (!['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
-      e.preventDefault();
-    }*/
-    // Instead of preventing the default behavior, change the css to not allow the user to select text
+    /* Instead of preventing the default behavior, change the 
+    css to prevent the user from selecting text */
     e.target.style.userSelect = 'none';
     
     // Start the timer for long press
