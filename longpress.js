@@ -78,8 +78,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     // Create a small circle where the user clicked, if the circle is left when the timer ends, the long press event is discarded
     var circle = document.createElement('div');
     circle.style.position = 'absolute';
-    circle.style.width = '10px';
-    circle.style.height = '10px';
+    circle.style.width = '30px';
+    circle.style.height = '30px';
     circle.style.backgroundColor = 'red';
     circle.style.borderRadius = '50%';
     circle.style.left = e.clientX + 'px';
