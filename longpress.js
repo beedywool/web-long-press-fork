@@ -85,12 +85,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     circle.style.position = 'absolute';
     circle.style.width = '30px';
     circle.style.height = '30px';
-    circle.style.backgroundColor = 'red';
     circle.style.borderRadius = '50%';
     circle.style.left = e.clientX + 'px';
     circle.style.top = e.clientY + 'px';
     circle.style.transform = 'translate(-50%, -50%)';
-    circle.style.zIndex = '9999';
+    circle.style.visibility = 'hidden';
 
     // Append the circle to the body
     document.body.appendChild(circle);
