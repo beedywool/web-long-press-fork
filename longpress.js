@@ -86,8 +86,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     circle.style.width = '30px';
     circle.style.height = '30px';
     circle.style.borderRadius = '50%';
-    circle.style.left = e.clientX + 'px';
-    circle.style.top = e.clientY + 'px';
+    circle.style.left = e.clientX ? e.clientX + 'px' : e.touches[0].clientX + 'px';
+    circle.style.top = e.clientY ? e.clientY + 'px' : e.touches[0].clientY + 'px';
     circle.style.transform = 'translate(-50%, -50%)';
     circle.style.visibility = 'hidden';
 
@@ -97,13 +97,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     // Get the mouse position every time it moves
     let mouseX, mouseY;
-    const mouseMoveHandler = function(e) {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+    const mouseMoveHandler = function(e, type = null) {
+      if (e.type === 'mousemove' || type === 'mouse') {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      } else if (e.type === 'touchmove' || type === 'touch') {
+        mouseX = e.touches[0].clientX;
+        mouseY = e.touches[0].clientY;
+      }
     };
     document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('touchmove', mouseMoveHandler);
     // Check the position of the mouse on the initial press as well
-    mouseMoveHandler(e);
+    mouseMoveHandler(e, e.clientX ? 'mouse' : 'touch');
 
     // Start the timer
     that.timer = setTimeout(function () {
