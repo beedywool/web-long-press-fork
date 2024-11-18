@@ -37,6 +37,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var that = this;
     var timer = that.timer;
     if (timer) clearTimeout(timer);
+    if (that.circle && that.circle.parentNode) {
+      that.circle.parentNode.removeChild(that.circle);
+    }
     var pressStart = that.pressStart.bind(that);
     var init = that.init.bind(that);
 
@@ -77,6 +80,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     // Start the timer for long press
     // Create a small circle where the user clicked, if the circle is left when the timer ends, the long press event is discarded
     var circle = document.createElement('div');
+
+    // Style the circle to position correctly
     circle.style.position = 'absolute';
     circle.style.width = '30px';
     circle.style.height = '30px';
@@ -84,23 +89,40 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     circle.style.borderRadius = '50%';
     circle.style.left = e.clientX + 'px';
     circle.style.top = e.clientY + 'px';
-    document.body.appendChild(circle);
+    circle.style.transform = 'translate(-50%, -50%)';
+    circle.style.zIndex = '9999';
 
+    // Append the circle to the body
+    document.body.appendChild(circle);
+    that.circle = circle;
+
+    // Get the mouse position every time it moves
+    let mouseX, mouseY;
+    const mouseMoveHandler = function(e) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    };
+    document.addEventListener('mousemove', mouseMoveHandler);
+    // Check the position of the mouse on the initial press as well
+    mouseMoveHandler(e);
+
+    // Start the timer
     that.timer = setTimeout(function () {
-      // Check if the pointer is still on the circle
+      // Calculate if the mouse is still in the circle
       const rect = circle.getBoundingClientRect();
-      const mouseX = e.clientX;
-      const mouseY = e.clientY;
+      const isInCircle = () => {
+        return mouseX >= rect.left && mouseX <= rect.right && mouseY >= rect.top && mouseY <= rect.bottom;
+      };
+      console.log(isInCircle());
       
-      const isInCircle = mouseX >= rect.left && mouseX <= rect.right && mouseY >= rect.top && mouseY <= rect.bottom;
-      
-      if (isInCircle) {
+      // If the mouse is still in the circle, trigger the long press event
+      if (isInCircle()) {
         if (circle.parentNode) {
           that.handleLongPress(e.target);
         }
-        // Remove the circle
-        circle.parentNode.removeChild(circle);
       }
+      // Remove the circle even if the long press event is not triggered
+      circle.parentNode.removeChild(circle);
     }, options.pressDelay);
   };
 
