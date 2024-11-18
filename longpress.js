@@ -75,8 +75,32 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     e.target.style.userSelect = 'none';
     
     // Start the timer for long press
+    // Create a small circle where the user clicked, if the circle is left when the timer ends, the long press event is discarded
+    var circle = document.createElement('div');
+    circle.style.position = 'absolute';
+    circle.style.width = '10px';
+    circle.style.height = '10px';
+    circle.style.backgroundColor = 'red';
+    circle.style.borderRadius = '50%';
+    circle.style.left = e.clientX + 'px';
+    circle.style.top = e.clientY + 'px';
+    document.body.appendChild(circle);
+
     that.timer = setTimeout(function () {
-      that.handleLongPress(e.target);
+      // Check if the pointer is still on the circle
+      const rect = circle.getBoundingClientRect();
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+      
+      const isInCircle = mouseX >= rect.left && mouseX <= rect.right && mouseY >= rect.top && mouseY <= rect.bottom;
+      
+      if (isInCircle) {
+        if (circle.parentNode) {
+          that.handleLongPress(e.target);
+        }
+        // Remove the circle
+        circle.parentNode.removeChild(circle);
+      }
     }, options.pressDelay);
   };
 
