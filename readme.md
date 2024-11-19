@@ -1,20 +1,16 @@
-FORK THAT CHANGES:
-Instead of suppressing the default behavior for everything, which caused issues with some stuff, especially on mobile, just prevent text from being selected when a text element is set for long-press.
-It makes it smoothly work for buttons, divs, and all other elements that don't have default long-press interactions, with the exception of text, it will work with text. 
-Doing so allows mobile users to scroll on the elements that are set for long-press.
-
 A tiny long-press event handler for web pages with pure vanilla javascript. Support pc's mouse click and mobile's touch events.
+
+# Improvements from this fork
+The fork fixes some problems with the initial module, mostly touch inputs for mobile users.
+The modifications allows mobile users to scroll on elements set for long-press, which wasn't possible previously. It also detects whether or not the user has scrolled AFTER the touch input, in which case it won't trigger the long-press event, to allow smooth and uninterrupted scrolling in a list with multiple elements set for long-press.
+As a drawback of these modifications though, this module won't work with images, but it will work fine with text, buttons, divisions, etc...
+
 
 # Install
 
+Use this script tag to add the module to your website
 ```
-npm install --save web-long-press
-```
-
-or
-
-```
-yarn add web-long-press
+<script async defer src="https://cdn.jsdelivr.net/gh/beedywool/web-long-press@latest/longpress.js"></script>
 ```
 
 # Usage
